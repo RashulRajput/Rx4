@@ -3,11 +3,12 @@ import {
   FileText, Clock, Search, Copy, ExternalLink,
   Download, History, PenTool, Bookmark, Book,
   FolderDown, Layout, Plus, User, Upload, Edit,
-  Type
+  Type, Quote
 } from 'lucide-react';
 import FileUpload from './FileUpload';
 import AIWriter from './AIWriter';
 import Paraphraser from './Paraphraser';
+import CitationGenerator from './CitationGenerator';
 import { searchPapers, getSearchSuggestions } from '../lib/searchService';
 import PaperDownloader from './PaperDownloader';
 import AccountSettings from './AccountSettings';
@@ -34,7 +35,7 @@ interface Paper {
 
 export default function DashboardPage() {
   // Tab state
-  const [activeTab, setActiveTab] = useState<'search' | 'downloads' | 'history' | 'accountSettings' | 'profile' | 'upload' | 'writer' | 'paraphrase'>('search');
+  const [activeTab, setActiveTab] = useState<'search' | 'downloads' | 'history' | 'accountSettings' | 'profile' | 'upload' | 'writer' | 'paraphrase' | 'cite'>('search');
 
   // Search state
   const [papers, setPapers] = useState<Paper[]>([]);
@@ -85,6 +86,15 @@ useEffect(() => {
         <div className="space-y-8">
           {/* Tab Navigation */}
           <div className="flex space-x-4 border-b border-purple-500/20">
+            <button
+              onClick={() => setActiveTab('cite')}
+              className={`px-4 py-2 text-sm font-medium flex items-center space-x-2 ${
+                activeTab === 'cite' ? 'text-purple-400 border-b-2 border-purple-400' : 'text-gray-400'
+              }`}
+            >
+              <Quote className="h-4 w-4" />
+              <span>Citation</span>
+            </button>
             <button
               onClick={() => setActiveTab('paraphrase')}
               className={`px-4 py-2 text-sm font-medium flex items-center space-x-2 ${
@@ -408,6 +418,9 @@ onChange={(e) => {
 
           {/* Profile Tab */}
 {activeTab === 'profile' && <UserProfile />}
+
+          {/* Citation Generator Tab */}
+          {activeTab === 'cite' && <CitationGenerator />}
 
           {/* AI Writer Tab */}
           {activeTab === 'writer' && <AIWriter />}
